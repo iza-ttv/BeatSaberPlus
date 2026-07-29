@@ -231,6 +231,8 @@ namespace BeatSaberPlus_ChatRequest
                         else
                             m_LastPlayingLevelResponse = $"{l_CurrentMap.songName} by {l_Mapper}";
 
+                        m_LastPlayingLevelResponseLink = "";
+
                         if (CP_SDK_BS.Game.Levels.LevelID_IsCustom(l_CurrentMap.levelID) && CP_SDK_BS.Game.Levels.TryGetHashFromLevelID(l_CurrentMap.levelID, out var l_Hash))
                         {
                             var l_CachedEntry = null as Models.SongEntry;
