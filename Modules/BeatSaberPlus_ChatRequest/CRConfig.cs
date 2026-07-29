@@ -166,7 +166,7 @@ namespace BeatSaberPlus_ChatRequest
                            internal EPermission RemoveCommandPermissions    = EPermission.Moderators;
             [JsonProperty] internal bool        RemoveCommandEnabled        = true;
             [JsonProperty] internal string      RemoveCommand               = "remove";
-            [JsonProperty] internal string      RemoveCommand_OK            = $"@$UserName (bsr $BSRKey) $SongName / $LevelAuthorName request by @RequesterName is removed from queue!";
+            [JsonProperty] internal string      RemoveCommand_OK            = $"@$UserName (bsr $BSRKey) $SongName / $LevelAuthorName request by @$RequesterName is removed from queue!";
             [JsonProperty] internal string      RemoveCommand_NotFound      = $"@$UserName No song in queue found with the key or username \"$Subject\"!";
 
             [JsonProperty, JsonConverter(typeof(StringEnumConverter))]
