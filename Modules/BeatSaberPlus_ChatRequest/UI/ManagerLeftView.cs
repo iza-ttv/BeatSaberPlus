@@ -9,6 +9,7 @@ namespace BeatSaberPlus_ChatRequest.UI
     internal sealed class ManagerLeftView : CP_SDK.UI.ViewController<ManagerLeftView>
     {
         private XUIPrimaryButton    m_SafeModeButton;
+        private XUIPrimaryButton    m_FairQueueButton;
         private XUISecondaryButton  m_QueueButton;
 
         ////////////////////////////////////////////////////////////////////////////
@@ -25,13 +26,14 @@ namespace BeatSaberPlus_ChatRequest.UI
                 XUIVLayout.Make(
                     XUIPrimaryButton.Make("Select random",      OnRandomButton),
 
-                    XUIVSpacer.Make(5f),
+                    XUIVSpacer.Make(3f),
 
                     XUIPrimaryButton.Make("ENABLE SAFE MODE",   OnSafeModeButton).Bind(ref m_SafeModeButton),
+                    XUIPrimaryButton.Make("Enable fair queue",  OnFairQueueButton).Bind(ref m_FairQueueButton),
                     XUIPrimaryButton.Make("Clear queue",        OnClearQueueButton),
                     XUIPrimaryButton.Make("Reset blocklist",    OnResetBlocklistButton),
 
-                    XUIVSpacer.Make(5f),
+                    XUIVSpacer.Make(3f),
 
                     XUISecondaryButton.Make("Close queue",      OnQueueButton).Bind(ref m_QueueButton)
                 )
@@ -57,6 +59,7 @@ namespace BeatSaberPlus_ChatRequest.UI
         protected override sealed void OnViewActivation()
         {
             UpdateSafeMode();
+            UpdateFairQueue();
             UpdateQueueStatus();
         }
 
@@ -72,6 +75,16 @@ namespace BeatSaberPlus_ChatRequest.UI
                 m_SafeModeButton?.SetText("DISABLE SAFE MODE");
             else
                 m_SafeModeButton?.SetText("ENABLE SAFE MODE");
+        }
+        /// <summary>
+        /// Update fair queue
+        /// </summary>
+        internal void UpdateFairQueue()
+        {
+            if (CRConfig.Instance.FairQueue)
+                m_FairQueueButton?.SetText("Disable fair queue");
+            else
+                m_FairQueueButton?.SetText("Enable fair queue");
         }
         /// <summary>
         /// Update queue status
@@ -125,6 +138,15 @@ namespace BeatSaberPlus_ChatRequest.UI
                     UpdateSafeMode();
                 });
             }
+        }
+        /// <summary>
+        /// Fair queue button
+        /// </summary>
+        private void OnFairQueueButton()
+        {
+            CRConfig.Instance.FairQueue = !CRConfig.Instance.FairQueue;
+            CRConfig.Instance.Save();
+            UpdateFairQueue();
         }
         /// <summary>
         /// Clear queue button

@@ -234,6 +234,8 @@ namespace BeatSaberPlus_ChatRequest
 
         [JsonProperty] internal bool QueueOpen = true;
 
+        [JsonProperty] internal bool FairQueue = false;
+
         [JsonProperty] internal int UserMaxRequest = 2;
         [JsonProperty] internal int VIPBonusRequest = 2;
         [JsonProperty] internal int SubscriberBonusRequest = 3;
