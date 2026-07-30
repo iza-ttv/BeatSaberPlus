@@ -91,13 +91,6 @@ namespace BeatSaberPlus_ChatRequest
                     l_ForceAllow = true;
             }
 
-            /// Check if already requested
-            if (!asModAdd && m_RequestedThisSessionID.Contains(bsrKey.ToLower()))
-            {
-                callback?.Invoke(new Models.AddToQueueResult(Models.EAddToQueueResult.AlreadyRequestedThisSession, bsrKey));
-                return;
-            }
-
             /// Check if allow listed or blocklisted
             if (!asModAdd && !l_ForceAllow)
             {
@@ -126,6 +119,13 @@ namespace BeatSaberPlus_ChatRequest
 
                 if (requester != null)
                     l_RateLimit.CurrentRequestCount = SongQueue.Where(x => x.RequesterName == requester.UserName).Count();
+            }
+
+            /// Check if already requested
+            if (!asModAdd && m_RequestedThisSessionID.Contains(bsrKey.ToLower()))
+            {
+                callback?.Invoke(new Models.AddToQueueResult(Models.EAddToQueueResult.AlreadyRequestedThisSession, bsrKey));
+                return;
             }
 
             /// Handle limits and title prefix
@@ -203,13 +203,6 @@ namespace BeatSaberPlus_ChatRequest
                     l_ForceAllow = true;
             }
 
-            /// Check if already requested
-            if (!asModAdd && m_RequestedThisSessionHash.Contains(l_LevelHash))
-            {
-                callback?.Invoke(new Models.AddToQueueResult(Models.EAddToQueueResult.AlreadyRequestedThisSession, l_LevelHash));
-                return;
-            }
-
             /// Check if allow listed or blocklisted
             if (!asModAdd && !l_ForceAllow)
             {
@@ -238,6 +231,13 @@ namespace BeatSaberPlus_ChatRequest
 
                 if (requester != null)
                     l_RateLimit.CurrentRequestCount = SongQueue.Where(x => x.RequesterName == requester.UserName).Count();
+            }
+
+            /// Check if already requested
+            if (!asModAdd && m_RequestedThisSessionHash.Contains(l_LevelHash))
+            {
+                callback?.Invoke(new Models.AddToQueueResult(Models.EAddToQueueResult.AlreadyRequestedThisSession, l_LevelHash));
+                return;
             }
 
             /// Handle limits and title prefix
