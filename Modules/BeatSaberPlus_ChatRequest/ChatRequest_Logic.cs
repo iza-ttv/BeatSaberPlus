@@ -576,6 +576,8 @@ namespace BeatSaberPlus_ChatRequest
 
                 if (UI.ManagerLeftView.CanBeUpdated)
                     UI.ManagerLeftView.Instance.UpdateQueueStatus();
+                if (UI.ManagerMainView.CanBeUpdated)
+                    UI.ManagerMainView.Instance.RebuiltTitle();
             });
         }
         /// <summary>
