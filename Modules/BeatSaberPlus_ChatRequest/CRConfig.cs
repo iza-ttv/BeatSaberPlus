@@ -279,6 +279,9 @@ namespace BeatSaberPlus_ChatRequest
 
             if (Commands != null && !Commands.LinkCommand_CurrentSong.Contains("$SongLink"))
                 Commands.LinkCommand_CurrentSong += " $SongLink";
+
+            if (Commands != null && Commands.RemoveCommand_OK.Contains("@RequesterName"))
+                Commands.RemoveCommand_OK = Commands.RemoveCommand_OK.Replace("@RequesterName", "@$RequesterName");
         }
     }
 }
