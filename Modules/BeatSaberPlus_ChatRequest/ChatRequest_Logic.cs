@@ -385,7 +385,6 @@ namespace BeatSaberPlus_ChatRequest
         private int GetFairIndex(string requesterName)
         {
             var lastIndexByUser = new Dictionary<string, int>();
-            int historyCount;
             lock (SongHistory)
             {
                 // Filter recent history and order by oldest to newest
@@ -393,23 +392,22 @@ namespace BeatSaberPlus_ChatRequest
                 var history = SongHistory.Where(
                     x => x.RequestTime.HasValue && (now - x.RequestTime.Value).TotalHours < 2.0
                 ).Reverse().ToList();
-                historyCount = history.Count;
 
-                for (int i = 0; i < historyCount; i++)
-                    lastIndexByUser[history[i].RequesterName] = i;
+                for (int i = 0; i < history.Count; i++)
+                    lastIndexByUser[history[i].RequesterName] = i - history.Count; // Negative values for history
             }
             // Assign priority for each queue entry. SongQueue is already locked
-            var priorities = new List<int>(SongQueue.Count);
+            var priorities = new int[SongQueue.Count];
             for (int i = 0; i < SongQueue.Count; i++)
             {
                 var userName = SongQueue[i].RequesterName;
                 // Priority is based on the number of requests between 2 requests from the same user
-                priorities.Add(lastIndexByUser.ContainsKey(userName) ? i + historyCount - lastIndexByUser[userName] : int.MaxValue);
-                lastIndexByUser[userName] = i + historyCount;
+                priorities[i] = lastIndexByUser.ContainsKey(userName) ? i - lastIndexByUser[userName] : int.MaxValue;
+                lastIndexByUser[userName] = i;
             }
             // Bump new request above lower priority entries
             int fairIndex = SongQueue.Count;
-            int priority = lastIndexByUser.ContainsKey(requesterName) ? fairIndex + historyCount - lastIndexByUser[requesterName] : int.MaxValue;
+            int priority = lastIndexByUser.ContainsKey(requesterName) ? fairIndex - lastIndexByUser[requesterName] : int.MaxValue;
             while (fairIndex > 0 && priority > priorities[fairIndex - 1])
             {
                 fairIndex--;
