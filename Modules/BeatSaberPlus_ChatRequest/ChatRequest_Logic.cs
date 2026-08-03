@@ -352,8 +352,8 @@ namespace BeatSaberPlus_ChatRequest
                     {
                         if (addToTop)
                             SongQueue.Insert(0, l_Entry);
-                        else if (CRConfig.Instance.FairQueue)
-                            SongQueue.Insert(GetFairIndex(!string.IsNullOrEmpty(onBehalfOf) ? onBehalfOf : l_RequesterName), l_Entry);
+                        else if (CRConfig.Instance.RoundRobin)
+                            SongQueue.Insert(GetRoundRobinIndex(!string.IsNullOrEmpty(onBehalfOf) ? onBehalfOf : l_RequesterName), l_Entry);
                         else
                             SongQueue.Add(l_Entry);
                     }
@@ -378,11 +378,11 @@ namespace BeatSaberPlus_ChatRequest
         }
 
         /// <summary>
-        /// Get fair queue insertion index for user.
-        /// Fair queue attempts to spread out requests more evenly between different users.
+        /// Get round-robin queue insertion index for user.
+        /// Attempts to spread out requests more evenly between different users.
         /// </summary>
         /// <param name="requesterName">Requester UserName</param>
-        private int GetFairIndex(string requesterName)
+        private int GetRoundRobinIndex(string requesterName)
         {
             var lastIndexByUser = new Dictionary<string, int>();
             lock (SongHistory)
@@ -406,15 +406,15 @@ namespace BeatSaberPlus_ChatRequest
                 lastIndexByUser[userName] = i;
             }
             // Bump new request above lower priority entries
-            int fairIndex = SongQueue.Count;
-            int priority = lastIndexByUser.ContainsKey(requesterName) ? fairIndex - lastIndexByUser[requesterName] : int.MaxValue;
-            while (fairIndex > 0 && priority > priorities[fairIndex - 1])
+            int index = SongQueue.Count;
+            int priority = lastIndexByUser.ContainsKey(requesterName) ? index - lastIndexByUser[requesterName] : int.MaxValue;
+            while (index > 0 && priority > priorities[index - 1])
             {
-                fairIndex--;
+                index--;
                 priority--;
             }
-            Logger.Instance.Debug($"GetFairIndex: {fairIndex} priority: {priority}");
-            return fairIndex;
+            Logger.Instance.Debug($"GetRoundRobinIndex: {index} priority: {priority}");
+            return index;
         }
 
         ////////////////////////////////////////////////////////////////////////////

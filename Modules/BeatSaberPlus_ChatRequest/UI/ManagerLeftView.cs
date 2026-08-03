@@ -9,7 +9,7 @@ namespace BeatSaberPlus_ChatRequest.UI
     internal sealed class ManagerLeftView : CP_SDK.UI.ViewController<ManagerLeftView>
     {
         private XUIPrimaryButton    m_SafeModeButton;
-        private XUIPrimaryButton    m_FairQueueButton;
+        private XUIPrimaryButton    m_RoundRobinButton;
         private XUISecondaryButton  m_QueueButton;
 
         ////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ namespace BeatSaberPlus_ChatRequest.UI
                     XUIVSpacer.Make(3f),
 
                     XUIPrimaryButton.Make("ENABLE SAFE MODE",   OnSafeModeButton).Bind(ref m_SafeModeButton),
-                    XUIPrimaryButton.Make("Enable fair queue",  OnFairQueueButton).Bind(ref m_FairQueueButton),
+                    XUIPrimaryButton.Make("Enable round-robin", OnRoundRobinButton).Bind(ref m_RoundRobinButton),
                     XUIPrimaryButton.Make("Clear queue",        OnClearQueueButton),
                     XUIPrimaryButton.Make("Reset blocklist",    OnResetBlocklistButton),
 
@@ -59,7 +59,7 @@ namespace BeatSaberPlus_ChatRequest.UI
         protected override sealed void OnViewActivation()
         {
             UpdateSafeMode();
-            UpdateFairQueue();
+            UpdateRoundRobin();
             UpdateQueueStatus();
         }
 
@@ -77,14 +77,14 @@ namespace BeatSaberPlus_ChatRequest.UI
                 m_SafeModeButton?.SetText("ENABLE SAFE MODE");
         }
         /// <summary>
-        /// Update fair queue
+        /// Update round-robin
         /// </summary>
-        internal void UpdateFairQueue()
+        internal void UpdateRoundRobin()
         {
-            if (CRConfig.Instance.FairQueue)
-                m_FairQueueButton?.SetText("Disable fair queue");
+            if (CRConfig.Instance.RoundRobin)
+                m_RoundRobinButton?.SetText("Disable round-robin");
             else
-                m_FairQueueButton?.SetText("Enable fair queue");
+                m_RoundRobinButton?.SetText("Enable round-robin");
         }
         /// <summary>
         /// Update queue status
@@ -140,13 +140,13 @@ namespace BeatSaberPlus_ChatRequest.UI
             }
         }
         /// <summary>
-        /// Fair queue button
+        /// Round-robin button
         /// </summary>
-        private void OnFairQueueButton()
+        private void OnRoundRobinButton()
         {
-            CRConfig.Instance.FairQueue = !CRConfig.Instance.FairQueue;
+            CRConfig.Instance.RoundRobin = !CRConfig.Instance.RoundRobin;
             CRConfig.Instance.Save();
-            UpdateFairQueue();
+            UpdateRoundRobin();
         }
         /// <summary>
         /// Clear queue button
