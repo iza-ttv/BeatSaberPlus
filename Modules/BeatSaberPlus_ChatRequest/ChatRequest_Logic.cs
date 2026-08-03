@@ -353,7 +353,7 @@ namespace BeatSaberPlus_ChatRequest
                         if (addToTop)
                             SongQueue.Insert(0, l_Entry);
                         else if (CRConfig.Instance.FairQueue)
-                            SongQueue.Insert(GetFairIndex(l_RequesterName), l_Entry);
+                            SongQueue.Insert(GetFairIndex(!string.IsNullOrEmpty(onBehalfOf) ? onBehalfOf : l_RequesterName), l_Entry);
                         else
                             SongQueue.Add(l_Entry);
                     }
